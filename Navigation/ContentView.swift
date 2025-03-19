@@ -8,10 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var path = NavigationPath()
+    
     var body: some View {
-        NavigationStack{
-            List(0..<100){ i in
+        NavigationStack(path: $path){
+            List(0..<10){ i in
                 NavigationLink("select \(i)", value: i)
+            }
+            .toolbar{
+                Button("push 556"){
+                    path.append(556)
+                }
+            }
+            .toolbar{
+                Button("push Hello World"){
+                    path.append("Hello World")
+                }
             }
             .navigationDestination(for: Int.self){ selection in
                 Text("you selected \(selection)")
