@@ -9,7 +9,7 @@ import SwiftUI
 
 @Observable
 class PathStore{
-    var path: [Int]{
+    var path: NavigationPath{
         //when the path is changes, we call the save() method
         didSet{
             save()
@@ -21,17 +21,20 @@ class PathStore{
     //the init loads data from disk and puts it into the path array
     init(){
         if let data = try? Data(contentsOf: savePath){//load data
-            if let decoded = try? JSONDecoder().decode([Int].self, from: data){
-                path = decoded
+            if let decoded = try? JSONDecoder().decode(NavigationPath.CodableRepresentation.self, from: data){
+                path = NavigationPath(decoded)
                 return
             }
         }
-        path = []//empty path if loading and decoding path did not work
+        path = NavigationPath()//empty NavigationPath if loading and decoding path did not work
     }
     
+    //function writes the Codable representation of our NavigationPath
     func save(){
+        
+        guard let representation = path.codable else {return}
         do{
-            let data = try? JSONEncoder().encode(path)
+            let data = try? JSONEncoder().encode(representation)
             try data?.write(to: savePath) //write data out to savePath
             
         }catch{
