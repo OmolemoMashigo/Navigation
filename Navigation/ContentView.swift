@@ -44,10 +44,12 @@ class PathStore{
 }
 struct DetailView: View{
     var number: Int
+    @State private var title = "SwiftUI"
     
     var body: some View{
         NavigationLink("Go to Random Number", value: Int.random(in: 1...1000))
-            .navigationTitle("number: \(number)")
+            .navigationTitle($title)
+            .navigationBarTitleDisplayMode(.inline)
         
     }
 }
@@ -62,6 +64,7 @@ struct ContentView: View {
                     DetailView(number: i)
                 }
         }
+        
     }
 }
 
